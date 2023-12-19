@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+<head>
+    <style>
+        .custom-file-input::-webkit-file-upload-button {
+      visibility: hidden;
+    }
+    .custom-file-input::before {
+      content: 'Select';
+      text-align: center;
+      background-color: #e30a13;
+      color: white;
+      display: inline-block;
+      background: linear-gradient(top, #f9f9f9, #e3e3e3);
+      border: 1px solid #999;
+      border-radius: 3px;
+      padding: 15px 18px;
+      outline: none;
+      white-space: nowrap;
+      /* -webkit-user-select: none; */
+      cursor: pointer;
+      text-shadow: 1px 1px #fff;
+      font-weight: 700;
+      font-size: 10pt;
+    }
+    .custom-file-input:hover::before {
+      border-color: black;
+    }
+    .custom-file-input:active::before {
+      background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
+    }
+    
+    .custom-file-upload {
+        display: inline-block;
+        position: relative;
+        cursor: pointer;
+        padding: 10px;
+        width: 120px;
+        background-color: #e30a13; /* Set your desired background color */
+        border-radius: 5px;
+        text-align: center  ;
+    }
+    
+    .custom-file-input {
+        display: none; /* Hide the original file input */
+    }
+    
+    .file-icon {
+        width: 40px;
+        height: 40px;
+        background: url('path/to/file-icon.png') no-repeat center center; /* Set your file icon */
+        background-size: cover;
+        background-color: #e3e3e3;
+        display: inline-block;
+        vertical-align: middle;
+        margin-right: 5px;
+    }
+    
+    .custom-file-upload span {
+        display: inline-block;
+        color: #ffffff;
+        font-weight: 400;
+    }
+    
+    /* Optional: Add hover effect */
+    .custom-file-upload:hover {
+        background-color: #e30a13; /* Set your desired hover background color */
+    }
+    
+    .form-check {
+            display: inline-block;
+            margin-right: 10px; /* Adjust as needed for spacing */
+        }
+    
+        .form-check-label {
+        font-weight: bold;
+      }
+      .form-check-input {
+        transform: scale(1.0); /* Adjust the scale as needed */
+        border: 1px solid #000; /* You can customize the border color and width */
+      }
+    
+      .btn-hidden {
+        display: none;
+      }
+    
+      /* Enlarge the button on hover */
+      .btn-enlarged:hover {
+        transform: scale(1.2); /* You can adjust the scale as needed */
+    
+      }
+      .btn-enlarged {
+        font-size: 1.0em; /* Adjust the font size as needed */
+        padding: 10px 20px; /* Adjust the padding as needed */
+      }
+       </style>    
+</head>
+<body>
+
+    <div class="container mt-3">
+        <form id="form">
+            <div class="row">
+                <div class="col-md-2">
+                    <p>Personal Status</p>
+                </div>
+                <div class="form-check col-md-2 ">
+                    <input type="radio" class="form-check-input" id="radio1" name="optradio" value="option1" checked>
+                    <label class="form-check-label" for="radio1"><h6> Individual </h6> </label>
+                </div>
+                <div class="form-check col-md-1">
+                    <input type="radio" class="form-check-input" id="radio2" name="optradio" value="option2">
+                    <label class="form-check-label" for="radio2"> <h6>Company</h6></label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <!-- <label for="name">Your Name</label> -->
+                    <i class="fas fa-user"></i>
+
+                    <input type="text" class="form-control" placeholder="Full Name" id="name" name="name">
+                </div>
+                <div class="col">
+                    <!-- <label for="name">Your Number</label> -->
+                    <input type="number" max="14" class="form-control" placeholder="Full Number" name="Number" id="Number">
+                </div>
+                <div class="col">
+                    <input type="email" class="form-control" placeholder="Your Email Id" id="email" name="email">
+                </div>
+            </div>
+
+            <table style="margin-top: 80px;">
+                <h5 style="margin-top: 40px;">Do you have office in the UAE Mainland?</h5>
+                <tbody><tr>
+                    <th width="190"></th>
+                    <th>Number of offices</th>
+                    <th>Company Type</th>
+                    <th>Financial Year Ends on</th>
+                    <th>Audited Accounts <br> Available?</th>
+                    <th>Attach <br> License</th>
+                </tr>
+                <tr>
+                    <td><label>Branch</label></td> 
+                    <td><input name="uae_mainland_branch_office_no" class="form-control captchaValid" type="text"></td>
+                    <td><input name="uae_mainland_branch_cmp_type" class="form-control captchaValid" type="text"></td>
+                    <td><input name="uae_mainland_branch_year_ends" class="form-control captchaValid" type="text"></td>
+                    <td><input name="uae_mainland_branch_aud_acc_avail" class="form-control captchaValid" type="text"></td>
+                    <td>
+                        <label class="custom-file-upload">
+                            <input type="file" name="fileAttachmentbranch" class="custom-file-input" data-office-type="branch" onchange="updateFileName(this)">
+                            <svg width="30px" height="30px" viewBox="0 0 24 24" fill="#ffffff" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M21.1525 10.8995L12.1369 19.9151C10.0866 21.9653 6.7625 21.9653 4.71225 19.9151C2.662 17.8648 2.662 14.5407 4.71225 12.4904L13.7279 3.47483C15.0947 2.108 17.3108 2.108 18.6776 3.47483C20.0444 4.84167 20.0444 7.05775 18.6776 8.42458L10.0156 17.0866C9.33213 17.7701 8.22409 17.7701 7.54068 17.0866C6.85726 16.4032 6.85726 15.2952 7.54068 14.6118L15.1421 7.01037" stroke="#e30a13" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                                <span style="display: inline-block; color: #ffffff; font-weight: 400;">Select</span>
+                        </label>													
+                    </td>
+                </tr>
+                <tr>
+                    <td><label>Sister company / common controlled</label></td>
+                    <td><input name="uae_mainland_sis_cmp_office_no" class="form-control captchaValid" type="text"></td>
+                    <td><input name="uae_mainland_sis_cmp_cmp_type" class="form-control captchaValid" type="text"></td>
+                    <td><input name="uae_mainland_sis_cmp_year_ends" class="form-control captchaValid" type="text"></td>
+                    <td><input name="uae_mainland_sis_cmp_aud_acc_avail" class="form-control captchaValid" type="text"></td>
+                    <td>
+                        <label class="custom-file-upload">
+                            <input type="file" name="fileAttachmentsister" class="custom-file-input" data-office-type="sister" onchange="updateFileName(this)">
+                            <svg width="30px" height="30px" viewBox="0 0 24 24" fill="#ffffff" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M21.1525 10.8995L12.1369 19.9151C10.0866 21.9653 6.7625 21.9653 4.71225 19.9151C2.662 17.8648 2.662 14.5407 4.71225 12.4904L13.7279 3.47483C15.0947 2.108 17.3108 2.108 18.6776 3.47483C20.0444 4.84167 20.0444 7.05775 18.6776 8.42458L10.0156 17.0866C9.33213 17.7701 8.22409 17.7701 7.54068 17.0866C6.85726 16.4032 6.85726 15.2952 7.54068 14.6118L15.1421 7.01037" stroke="#e30a13" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                                <span style="display: inline-block; color: #ffffff; font-weight: 400;">Select</span>
+                        </label>															
+                    </td>
+                </tr>
+                <tr>
+                    <td><label>Subsidiary</label></td>
+                    <td><input name="uae_mainland_subsidiary_office_no" class="form-control captchaValid" type="text"></td>
+                    <td><input name="uae_mainland_subsidiary_cmp_type" class="form-control captchaValid" type="text"></td>
+                    <td><input name="uae_mainland_subsidiary_year_ends" class="form-control captchaValid" type="text"></td>
+                    <td><input name="uae_mainland_subsidiary_aud_acc_avail" class="form-control captchaValid" type="text"></td>
+                    <td>
+                        <label class="custom-file-upload">
+                            <input type="file" name="fileAttachmentsubsidiary" class="custom-file-input" data-office-type="subsidiary" onchange="updateFileName(this)">
+                            <svg width="30px" height="30px" viewBox="0 0 24 24" fill="#ffffff" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M21.1525 10.8995L12.1369 19.9151C10.0866 21.9653 6.7625 21.9653 4.71225 19.9151C2.662 17.8648 2.662 14.5407 4.71225 12.4904L13.7279 3.47483C15.0947 2.108 17.3108 2.108 18.6776 3.47483C20.0444 4.84167 20.0444 7.05775 18.6776 8.42458L10.0156 17.0866C9.33213 17.7701 8.22409 17.7701 7.54068 17.0866C6.85726 16.4032 6.85726 15.2952 7.54068 14.6118L15.1421 7.01037" stroke="#e30a13" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                                <span style="display: inline-block; color: #ffffff; font-weight: 400;">Select</span>
+                        </label>														
+                    </td>
+                </tr>
+                <tr>
+                    <td><label>Foreign Branch</label></td>
+                    <td><input name="uae_mainland_forgn_brnch_office_no" class="form-control captchaValid" type="text"></td>
+                    <td><input name="uae_mainland_forgn_brnch_cmp_type" class="form-control captchaValid" type="text"></td>
+                    <td><input name="uae_mainland_forgn_brnch_year_ends" class="form-control captchaValid" type="text"></td>
+                    <td><input name="uae_mainland_forgn_brnch_aud_acc_avail" class="form-control captchaValid" type="text"></td>
+                    <td>
+                        <label class="custom-file-upload">
+                            <input type="file" name="fileAttachmentforeign_branch" class="custom-file-input" data-office-type="foreign_branch" onchange="updateFileName(this)">
+                            <svg width="30px" height="30px" viewBox="0 0 24 24" fill="#ffffff" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M21.1525 10.8995L12.1369 19.9151C10.0866 21.9653 6.7625 21.9653 4.71225 19.9151C2.662 17.8648 2.662 14.5407 4.71225 12.4904L13.7279 3.47483C15.0947 2.108 17.3108 2.108 18.6776 3.47483C20.0444 4.84167 20.0444 7.05775 18.6776 8.42458L10.0156 17.0866C9.33213 17.7701 8.22409 17.7701 7.54068 17.0866C6.85726 16.4032 6.85726 15.2952 7.54068 14.6118L15.1421 7.01037" stroke="#e30a13" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                                <span style="display: inline-block; color: #ffffff; font-weight: 400;">Select</span>
+                        </label>															
+                    </td>
+                </tr>
+                <tr>
+                    <td><label>Parent Company</label></td>
+                    <td><input name="uae_mainland_prnt_cmp_office_no" class="form-control captchaValid" type="text"></td>
+                    <td><input name="uae_mainland_prnt_cmp_cmp_type" class="form-control captchaValid" type="text"></td>
+                    <td><input name="uae_mainland_prnt_cmp_year_ends" class="form-control captchaValid" type="text"></td>
+                    <td><input name="uae_mainland_prnt_cmp_aud_acc_avail" class="form-control captchaValid" type="text"></td>
+                    <td>
+                        <label class="custom-file-upload">
+                            <input type="file" name="fileAttachmentparent_company" class="custom-file-input" data-office-type="parent_company" onchange="updateFileName(this)">
+                            <svg width="30px" height="30px" viewBox="0 0 24 24" fill="#ffffff" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M21.1525 10.8995L12.1369 19.9151C10.0866 21.9653 6.7625 21.9653 4.71225 19.9151C2.662 17.8648 2.662 14.5407 4.71225 12.4904L13.7279 3.47483C15.0947 2.108 17.3108 2.108 18.6776 3.47483C20.0444 4.84167 20.0444 7.05775 18.6776 8.42458L10.0156 17.0866C9.33213 17.7701 8.22409 17.7701 7.54068 17.0866C6.85726 16.4032 6.85726 15.2952 7.54068 14.6118L15.1421 7.01037" stroke="#e30a13" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                                <span style="display: inline-block; color: #ffffff; font-weight: 400;">Select</span>
+                        </label>														
+                    </td>
+                </tr>
+                <tr>
+                    <td><label>Other</label></td>
+                    <td><input name="uae_mainland_other_cmp_office_no" class="form-control captchaValid" type="text"></td>
+                    <td><input name="uae_mainland_other_cmp_cmp_type" class="form-control captchaValid" type="text"></td>
+                    <td><input name="uae_mainland_other_cmp_year_ends" class="form-control captchaValid" type="text"></td>
+                    <td><input name="uae_mainland_other_cmp_aud_acc_avail" class="form-control captchaValid" type="text"></td>
+                    <td>
+                        <label class="custom-file-upload">
+                            <input type="file" name="fileAttachmentother" class="custom-file-input" data-office-type="other" onchange="updateFileName(this)">
+                            <svg width="30px" height="30px" viewBox="0 0 24 24" fill="#ffffff" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M21.1525 10.8995L12.1369 19.9151C10.0866 21.9653 6.7625 21.9653 4.71225 19.9151C2.662 17.8648 2.662 14.5407 4.71225 12.4904L13.7279 3.47483C15.0947 2.108 17.3108 2.108 18.6776 3.47483C20.0444 4.84167 20.0444 7.05775 18.6776 8.42458L10.0156 17.0866C9.33213 17.7701 8.22409 17.7701 7.54068 17.0866C6.85726 16.4032 6.85726 15.2952 7.54068 14.6118L15.1421 7.01037" stroke="#e30a13" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                                <span style="display: inline-block; color: #ffffff; font-weight: 400;">Select</span>
+                        </label>													
+                    </td>
+                </tr>
+            </tbody></table><hr>
+            <table style="margin-top: 80px;">
+                <h5 style="margin-top: 40px;">Do you have office in the UAE Freezone?</h5>
+                <tbody><tr>
+                    <th width="190"></th>
+                    <th>Number of offices</th>
+                    <th>Company Type</th>
+                    <th>Financial Year Ends on</th>
+                    <th>Audited Accounts <br> Available?</th>
+                    <th>Attach <br> License</th>
+                </tr>
+                <tr>
+                    <td><label>Branch</label></td> 
+                    <td><input name="uae_mainland_branch_office_no" class="form-control captchaValid" type="text"></td>
+                    <td><input name="uae_mainland_branch_cmp_type" class="form-control captchaValid" type="text"></td>
+                    <td><input name="uae_mainland_branch_year_ends" class="form-control captchaValid" type="text"></td>
+                    <td><input name="uae_mainland_branch_aud_acc_avail" class="form-control captchaValid" type="text"></td>
+                    <td>
+                        <label class="custom-file-upload">
+                            <input type="file" name="fileAttachmentbranch" class="custom-file-input" data-office-type="branch" onchange="updateFileName(this)">
+                            <svg width="30px" height="30px" viewBox="0 0 24 24" fill="#ffffff" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M21.1525 10.8995L12.1369 19.9151C10.0866 21.9653 6.7625 21.9653 4.71225 19.9151C2.662 17.8648 2.662 14.5407 4.71225 12.4904L13.7279 3.47483C15.0947 2.108 17.3108 2.108 18.6776 3.47483C20.0444 4.84167 20.0444 7.05775 18.6776 8.42458L10.0156 17.0866C9.33213 17.7701 8.22409 17.7701 7.54068 17.0866C6.85726 16.4032 6.85726 15.2952 7.54068 14.6118L15.1421 7.01037" stroke="#e30a13" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                                <span style="display: inline-block; color: #ffffff; font-weight: 400;">Select</span>
+                        </label>													
+                    </td>
+                </tr>
+                <tr>
+                    <td><label>Sister company / common controlled</label></td>
+                    <td><input name="uae_mainland_sis_cmp_office_no" class="form-control captchaValid" type="text"></td>
+                    <td><input name="uae_mainland_sis_cmp_cmp_type" class="form-control captchaValid" type="text"></td>
+                    <td><input name="uae_mainland_sis_cmp_year_ends" class="form-control captchaValid" type="text"></td>
+                    <td><input name="uae_mainland_sis_cmp_aud_acc_avail" class="form-control captchaValid" type="text"></td>
+                    <td>
+                        <label class="custom-file-upload">
+                            <input type="file" name="fileAttachmentsister" class="custom-file-input" data-office-type="sister" onchange="updateFileName(this)">
+                            <svg width="30px" height="30px" viewBox="0 0 24 24" fill="#ffffff" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M21.1525 10.8995L12.1369 19.9151C10.0866 21.9653 6.7625 21.9653 4.71225 19.9151C2.662 17.8648 2.662 14.5407 4.71225 12.4904L13.7279 3.47483C15.0947 2.108 17.3108 2.108 18.6776 3.47483C20.0444 4.84167 20.0444 7.05775 18.6776 8.42458L10.0156 17.0866C9.33213 17.7701 8.22409 17.7701 7.54068 17.0866C6.85726 16.4032 6.85726 15.2952 7.54068 14.6118L15.1421 7.01037" stroke="#e30a13" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                                <span style="display: inline-block; color: #ffffff; font-weight: 400;">Select</span>
+                        </label>															
+                    </td>
+                </tr>
+                <tr>
+                    <td><label>Subsidiary</label></td>
+                    <td><input name="uae_mainland_subsidiary_office_no" class="form-control captchaValid" type="text"></td>
+                    <td><input name="uae_mainland_subsidiary_cmp_type" class="form-control captchaValid" type="text"></td>
+                    <td><input name="uae_mainland_subsidiary_year_ends" class="form-control captchaValid" type="text"></td>
+                    <td><input name="uae_mainland_subsidiary_aud_acc_avail" class="form-control captchaValid" type="text"></td>
+                    <td>
+                        <label class="custom-file-upload">
+                            <input type="file" name="fileAttachmentsubsidiary" class="custom-file-input" data-office-type="subsidiary" onchange="updateFileName(this)">
+                            <svg width="30px" height="30px" viewBox="0 0 24 24" fill="#ffffff" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M21.1525 10.8995L12.1369 19.9151C10.0866 21.9653 6.7625 21.9653 4.71225 19.9151C2.662 17.8648 2.662 14.5407 4.71225 12.4904L13.7279 3.47483C15.0947 2.108 17.3108 2.108 18.6776 3.47483C20.0444 4.84167 20.0444 7.05775 18.6776 8.42458L10.0156 17.0866C9.33213 17.7701 8.22409 17.7701 7.54068 17.0866C6.85726 16.4032 6.85726 15.2952 7.54068 14.6118L15.1421 7.01037" stroke="#e30a13" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                                <span style="display: inline-block; color: #ffffff; font-weight: 400;">Select</span>
+                        </label>														
+                    </td>
+                </tr>
+                <tr>
+                    <td><label>Foreign Branch</label></td>
+                    <td><input name="uae_mainland_forgn_brnch_office_no" class="form-control captchaValid" type="text"></td>
+                    <td><input name="uae_mainland_forgn_brnch_cmp_type" class="form-control captchaValid" type="text"></td>
+                    <td><input name="uae_mainland_forgn_brnch_year_ends" class="form-control captchaValid" type="text"></td>
+                    <td><input name="uae_mainland_forgn_brnch_aud_acc_avail" class="form-control captchaValid" type="text"></td>
+                    <td>
+                        <label class="custom-file-upload">
+                            <input type="file" name="fileAttachmentforeign_branch" class="custom-file-input" data-office-type="foreign_branch" onchange="updateFileName(this)">
+                            <svg width="30px" height="30px" viewBox="0 0 24 24" fill="#ffffff" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M21.1525 10.8995L12.1369 19.9151C10.0866 21.9653 6.7625 21.9653 4.71225 19.9151C2.662 17.8648 2.662 14.5407 4.71225 12.4904L13.7279 3.47483C15.0947 2.108 17.3108 2.108 18.6776 3.47483C20.0444 4.84167 20.0444 7.05775 18.6776 8.42458L10.0156 17.0866C9.33213 17.7701 8.22409 17.7701 7.54068 17.0866C6.85726 16.4032 6.85726 15.2952 7.54068 14.6118L15.1421 7.01037" stroke="#e30a13" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                                <span style="display: inline-block; color: #ffffff; font-weight: 400;">Select</span>
+                        </label>															
+                    </td>
+                </tr>
+                <tr>
+                    <td><label>Parent Company</label></td>
+                    <td><input name="uae_mainland_prnt_cmp_office_no" class="form-control captchaValid" type="text"></td>
+                    <td><input name="uae_mainland_prnt_cmp_cmp_type" class="form-control captchaValid" type="text"></td>
+                    <td><input name="uae_mainland_prnt_cmp_year_ends" class="form-control captchaValid" type="text"></td>
+                    <td><input name="uae_mainland_prnt_cmp_aud_acc_avail" class="form-control captchaValid" type="text"></td>
+                    <td>
+                        <label class="custom-file-upload">
+                            <input type="file" name="fileAttachmentparent_company" class="custom-file-input" data-office-type="parent_company" onchange="updateFileName(this)">
+                            <svg width="30px" height="30px" viewBox="0 0 24 24" fill="#ffffff" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M21.1525 10.8995L12.1369 19.9151C10.0866 21.9653 6.7625 21.9653 4.71225 19.9151C2.662 17.8648 2.662 14.5407 4.71225 12.4904L13.7279 3.47483C15.0947 2.108 17.3108 2.108 18.6776 3.47483C20.0444 4.84167 20.0444 7.05775 18.6776 8.42458L10.0156 17.0866C9.33213 17.7701 8.22409 17.7701 7.54068 17.0866C6.85726 16.4032 6.85726 15.2952 7.54068 14.6118L15.1421 7.01037" stroke="#e30a13" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                                <span style="display: inline-block; color: #ffffff; font-weight: 400;">Select</span>
+                        </label>														
+                    </td>
+                </tr>
+                <tr>
+                    <td><label>Offshore Company / IBC	</label></td>
+                    <td><input name="uae_mainland_prnt_cmp_office_no" class="form-control captchaValid" type="text"></td>
+                    <td><input name="uae_mainland_prnt_cmp_cmp_type" class="form-control captchaValid" type="text"></td>
+                    <td><input name="uae_mainland_prnt_cmp_year_ends" class="form-control captchaValid" type="text"></td>
+                    <td><input name="uae_mainland_prnt_cmp_aud_acc_avail" class="form-control captchaValid" type="text"></td>
+                    <td>
+                        <label class="custom-file-upload">
+                            <input type="file" name="fileAttachmentparent_company" class="custom-file-input" data-office-type="parent_company" onchange="updateFileName(this)">
+                            <svg width="30px" height="30px" viewBox="0 0 24 24" fill="#ffffff" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M21.1525 10.8995L12.1369 19.9151C10.0866 21.9653 6.7625 21.9653 4.71225 19.9151C2.662 17.8648 2.662 14.5407 4.71225 12.4904L13.7279 3.47483C15.0947 2.108 17.3108 2.108 18.6776 3.47483C20.0444 4.84167 20.0444 7.05775 18.6776 8.42458L10.0156 17.0866C9.33213 17.7701 8.22409 17.7701 7.54068 17.0866C6.85726 16.4032 6.85726 15.2952 7.54068 14.6118L15.1421 7.01037" stroke="#e30a13" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                                <span style="display: inline-block; color: #ffffff; font-weight: 400;">Select</span>
+                        </label>														
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td><label>Other</label></td>
+                    <td><input name="uae_mainland_other_cmp_office_no" class="form-control captchaValid" type="text"></td>
+                    <td><input name="uae_mainland_other_cmp_cmp_type" class="form-control captchaValid" type="text"></td>
+                    <td><input name="uae_mainland_other_cmp_year_ends" class="form-control captchaValid" type="text"></td>
+                    <td><input name="uae_mainland_other_cmp_aud_acc_avail" class="form-control captchaValid" type="text"></td>
+                    <td>
+                        <label class="custom-file-upload">
+                            <input type="file" name="fileAttachmentother" class="custom-file-input" data-office-type="other" onchange="updateFileName(this)">
+                            <svg width="30px" height="30px" viewBox="0 0 24 24" fill="#ffffff" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M21.1525 10.8995L12.1369 19.9151C10.0866 21.9653 6.7625 21.9653 4.71225 19.9151C2.662 17.8648 2.662 14.5407 4.71225 12.4904L13.7279 3.47483C15.0947 2.108 17.3108 2.108 18.6776 3.47483C20.0444 4.84167 20.0444 7.05775 18.6776 8.42458L10.0156 17.0866C9.33213 17.7701 8.22409 17.7701 7.54068 17.0866C6.85726 16.4032 6.85726 15.2952 7.54068 14.6118L15.1421 7.01037" stroke="#e30a13" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                                <span style="display: inline-block; color: #ffffff; font-weight: 400;">Select</span>
+                        </label>													
+                    </td>
+                </tr>
+            </tbody></table><hr>
+
+            <table style="margin-top: 80px;">
+                <h5 style="margin-top: 40px;">Do you fall under any of the special corporate structure?  </h5>
+                <tbody><tr>
+                    <th width="190"></th>
+                    <th>Number of offices</th>
+                    <th>Company Type</th>
+                    <th>Financial Year Ends on</th>
+                    <th>Audited Accounts <br> Available?</th>
+                    <th>Attach <br> License</th>
+                </tr>
+                <tr>
+                    <td><label>Unincorported Partnership	</label></td> 
+                    <td><input name="uae_mainland_branch_office_no" class="form-control captchaValid" type="text"></td>
+                    <td><input name="uae_mainland_branch_cmp_type" class="form-control captchaValid" type="text"></td>
+                    <td><input name="uae_mainland_branch_year_ends" class="form-control captchaValid" type="text"></td>
+                    <td><input name="uae_mainland_branch_aud_acc_avail" class="form-control captchaValid" type="text"></td>
+                    <td>
+                        <label class="custom-file-upload">
+                            <input type="file" name="fileAttachmentbranch" class="custom-file-input" data-office-type="branch" onchange="updateFileName(this)">
+                            <svg width="30px" height="30px" viewBox="0 0 24 24" fill="#ffffff" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M21.1525 10.8995L12.1369 19.9151C10.0866 21.9653 6.7625 21.9653 4.71225 19.9151C2.662 17.8648 2.662 14.5407 4.71225 12.4904L13.7279 3.47483C15.0947 2.108 17.3108 2.108 18.6776 3.47483C20.0444 4.84167 20.0444 7.05775 18.6776 8.42458L10.0156 17.0866C9.33213 17.7701 8.22409 17.7701 7.54068 17.0866C6.85726 16.4032 6.85726 15.2952 7.54068 14.6118L15.1421 7.01037" stroke="#e30a13" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                                <span style="display: inline-block; color: #ffffff; font-weight: 400;">Select</span>
+                        </label>													
+                    </td>
+                </tr>
+                <tr>
+                    <td><label>Qualifying Free Zone Person under article 18</label></td>
+                    <td><input name="uae_mainland_sis_cmp_office_no" class="form-control captchaValid" type="text"></td>
+                    <td><input name="uae_mainland_sis_cmp_cmp_type" class="form-control captchaValid" type="text"></td>
+                    <td><input name="uae_mainland_sis_cmp_year_ends" class="form-control captchaValid" type="text"></td>
+                    <td><input name="uae_mainland_sis_cmp_aud_acc_avail" class="form-control captchaValid" type="text"></td>
+                    <td>
+                        <label class="custom-file-upload">
+                            <input type="file" name="fileAttachmentsister" class="custom-file-input" data-office-type="sister" onchange="updateFileName(this)">
+                            <svg width="30px" height="30px" viewBox="0 0 24 24" fill="#ffffff" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M21.1525 10.8995L12.1369 19.9151C10.0866 21.9653 6.7625 21.9653 4.71225 19.9151C2.662 17.8648 2.662 14.5407 4.71225 12.4904L13.7279 3.47483C15.0947 2.108 17.3108 2.108 18.6776 3.47483C20.0444 4.84167 20.0444 7.05775 18.6776 8.42458L10.0156 17.0866C9.33213 17.7701 8.22409 17.7701 7.54068 17.0866C6.85726 16.4032 6.85726 15.2952 7.54068 14.6118L15.1421 7.01037" stroke="#e30a13" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                                <span style="display: inline-block; color: #ffffff; font-weight: 400;">Select</span>
+                        </label>															
+                    </td>
+                </tr>
+                <tr>
+                    <td><label>Foreign Partnership</label></td>
+                    <td><input name="uae_mainland_subsidiary_office_no" class="form-control captchaValid" type="text"></td>
+                    <td><input name="uae_mainland_subsidiary_cmp_type" class="form-control captchaValid" type="text"></td>
+                    <td><input name="uae_mainland_subsidiary_year_ends" class="form-control captchaValid" type="text"></td>
+                    <td><input name="uae_mainland_subsidiary_aud_acc_avail" class="form-control captchaValid" type="text"></td>
+                    <td>
+                        <label class="custom-file-upload">
+                            <input type="file" name="fileAttachmentsubsidiary" class="custom-file-input" data-office-type="subsidiary" onchange="updateFileName(this)">
+                            <svg width="30px" height="30px" viewBox="0 0 24 24" fill="#ffffff" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M21.1525 10.8995L12.1369 19.9151C10.0866 21.9653 6.7625 21.9653 4.71225 19.9151C2.662 17.8648 2.662 14.5407 4.71225 12.4904L13.7279 3.47483C15.0947 2.108 17.3108 2.108 18.6776 3.47483C20.0444 4.84167 20.0444 7.05775 18.6776 8.42458L10.0156 17.0866C9.33213 17.7701 8.22409 17.7701 7.54068 17.0866C6.85726 16.4032 6.85726 15.2952 7.54068 14.6118L15.1421 7.01037" stroke="#e30a13" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                                <span style="display: inline-block; color: #ffffff; font-weight: 400;">Select</span>
+                        </label>														
+                    </td>
+                </tr>
+                <tr>
+                    <td><label>Family Foundation under article 17</label></td>
+                    <td><input name="uae_mainland_forgn_brnch_office_no" class="form-control captchaValid" type="text"></td>
+                    <td><input name="uae_mainland_forgn_brnch_cmp_type" class="form-control captchaValid" type="text"></td>
+                    <td><input name="uae_mainland_forgn_brnch_year_ends" class="form-control captchaValid" type="text"></td>
+                    <td><input name="uae_mainland_forgn_brnch_aud_acc_avail" class="form-control captchaValid" type="text"></td>
+                    <td>
+                        <label class="custom-file-upload">
+                            <input type="file" name="fileAttachmentforeign_branch" class="custom-file-input" data-office-type="foreign_branch" onchange="updateFileName(this)">
+                            <svg width="30px" height="30px" viewBox="0 0 24 24" fill="#ffffff" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M21.1525 10.8995L12.1369 19.9151C10.0866 21.9653 6.7625 21.9653 4.71225 19.9151C2.662 17.8648 2.662 14.5407 4.71225 12.4904L13.7279 3.47483C15.0947 2.108 17.3108 2.108 18.6776 3.47483C20.0444 4.84167 20.0444 7.05775 18.6776 8.42458L10.0156 17.0866C9.33213 17.7701 8.22409 17.7701 7.54068 17.0866C6.85726 16.4032 6.85726 15.2952 7.54068 14.6118L15.1421 7.01037" stroke="#e30a13" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                                <span style="display: inline-block; color: #ffffff; font-weight: 400;">Select</span>
+                        </label>															
+                    </td>
+                </tr>
+            </tbody></table><hr>
+
+            <div class="container mt-4">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>Do you have a exempted income?	</th>
+                      <th>Yes / No	</th>
+                      <th>Which year it relates?</th>
+                    </tr>
+                  </thead>
+                  <div class="row">
+                    <tbody>
+                      <tr>
+                        <td>Dividends/Profit distributions from resident juridical person</td>
+                        <td>
+                          <div class="radio-container">
+                            <div class="form-check">
+                              <input type="radio" class="form-check-input" id="radio1a" name="optradio1" value="option1" >
+                              <label class="form-check-label" for="radio1a">Yes</label>
+                            </div>
+                            <div class="form-check">
+                              <input type="radio" class="form-check-input" id="radio2a" name="optradio1" value="option2" checked>
+                              <label class="form-check-label" for="radio2a">No</label>
+                            </div>
+                          </div>
+                        </td>
+                        <td>
+                          <input type="text">
+                        </td>
+                      </tr>
+                    </tbody>
+                </div>
+                  <div class="row">
+                    <tbody>
+                      <tr>
+                        <td>Dividends/Profit distributions from Participating interest (5%<) in Foreign juridical person u/a 23	</td>
+                        <td>
+                          <div class="radio-container">
+                            <div class="form-check">
+                              <input type="radio" class="form-check-input" id="radio1b" name="optradio2" value="option1">
+                              <label class="form-check-label" for="radio1b">Yes</label>
+                            </div>
+                            <div class="form-check">
+                              <input type="radio" class="form-check-input" id="radio2b" name="optradio2" value="option2" checked>
+                              <label class="form-check-label" for="radio2b">No</label>
+                            </div>
+                          </div>
+                        </td>
+                        <td>
+                          <input type="text">
+                        </td>
+                      </tr>
+                    </tbody>
+                  </div>
+                  <div class="row">
+                    <tbody>
+                      <tr>
+                        <td>Any other income from a Participating Interest (5%<) u/a 23	</td>
+                        <td>
+                          <div class="radio-container">
+                            <div class="form-check">
+                              <input type="radio" class="form-check-input" id="radio1c" name="optradio3" value="option1">
+                              <label class="form-check-label" for="radio1c">Yes</label>
+                            </div>
+                            <div class="form-check">
+                              <input type="radio" class="form-check-input" id="radio2c" name="optradio3" value="option2" checked>
+                              <label class="form-check-label" for="radio2c">No</label>
+                            </div>
+                          </div>
+                        </td>
+                        <td>
+                          <input type="text">
+                        </td>
+                      </tr>
+                    </tbody>
+                  </div>
+                  <div class="row">
+                    <tbody>
+                      <tr>
+                        <td>Income of a Foreign Permanent Establishment fulfilling article 24 conditions	</td>
+                        <td>
+                          <div class="radio-container">
+                            <div class="form-check">
+                              <input type="radio" class="form-check-input" id="radio1d" name="optradio4" value="option1" >
+                              <label class="form-check-label" for="radio1d">Yes</label>
+                            </div>
+                            <div class="form-check">
+                              <input type="radio" class="form-check-input" id="radio2d" name="optradio4" value="option2" checked>
+                              <label class="form-check-label" for="radio2d">No</label>
+                            </div>
+                          </div>
+                        </td>
+                        <td>
+                          <input type="text">
+                        </td>
+                      </tr>
+                    </tbody>
+                </div>
+                  <div class="row">
+                    <tbody>
+                      <tr>
+                        <td>Income of Non-Resident Person by operating aircraft or ships in international
+                             transportation fulfilling <br> article 25 conditions</td>
+                        <td>
+                          <div class="radio-container">
+                            <div class="form-check">
+                              <input type="radio" class="form-check-input" id="radio1e" name="optradio5" value="option1">
+                              <label class="form-check-label" for="radio1e">Yes</label>
+                            </div>
+                            <div class="form-check">
+                              <input type="radio" class="form-check-input" id="radio2e" name="optradio5" value="option2" checked>
+                              <label class="form-check-label" for="radio2e">No</label>
+                            </div>
+                          </div>
+                        </td>
+                        <td>
+                          <input type="text">
+                        </td>
+                      </tr>
+                    </tbody>
+                  </div>
+                  <div class="row">
+                    <tbody>
+                      <tr>
+                        <td>Foreign Inter-company transactions giving effect to the transfer prices?	</td>
+                        <td>
+                          <div class="radio-container">
+                            <div class="form-check">
+                              <input type="radio" class="form-check-input" id="radio1f" name="optradio6" value="option1">
+                              <label class="form-check-label" for="radio1f">Yes</label>
+                            </div>
+                            <div class="form-check">
+                              <input type="radio" class="form-check-input" id="radio2f" name="optradio6" value="option2" checked>
+                              <label class="form-check-label" for="radio2f">No</label>
+                            </div>
+                          </div>
+                        </td>
+                        <td>
+                          <input type="text">
+                        </td>
+                      </tr>
+                    </tbody>
+                  </div>
+                  <div class="row">
+                    <tbody>
+                      <tr>
+                        <td>Do you have a non-UAE source income?	</td>
+                        <td>
+                          <div class="radio-container">
+                            <div class="form-check">
+                              <input type="radio" class="form-check-input" id="radio1g" name="optradio7" value="option1" >
+                              <label class="form-check-label" for="radio1g">Yes</label>
+                            </div>
+                            <div class="form-check">
+                              <input type="radio" class="form-check-input" id="radio2g" name="optradio7" value="option2" checked>
+                              <label class="form-check-label" for="radio2g">No</label>
+                            </div>
+                          </div>
+                        </td>
+                        <td>
+                          <input type="text">
+                        </td>
+                      </tr>
+                    </tbody>
+                </div>
+                  <div class="row">
+                    <tbody>
+                      <tr>
+                        <td>Do you have interest Income?	</td>
+                        <td>
+                          <div class="radio-container">
+                            <div class="form-check">
+                              <input type="radio" class="form-check-input" id="radio1h" name="optradio8" value="option1">
+                              <label class="form-check-label" for="radio1h">Yes</label>
+                            </div>
+                            <div class="form-check">
+                              <input type="radio" class="form-check-input" id="radio2h" name="optradio8" value="option2" checked>
+                              <label class="form-check-label" for="radio2h">No</label>
+                            </div>
+                          </div>
+                        </td>
+                        <td>
+                          <input type="text">
+                        </td>
+                      </tr>
+                    </tbody>
+                  </div>
+                  <div class="row">
+                    <tbody>
+                      <tr>
+                        <td>Do you have interest expense?	</td>
+                        <td>
+                          <div class="radio-container">
+                            <div class="form-check">
+                              <input type="radio" class="form-check-input" id="radio1i" name="optradio9" value="option1">
+                              <label class="form-check-label" for="radio1i">Yes</label>
+                            </div>
+                            <div class="form-check">
+                              <input type="radio" class="form-check-input" id="radio2i" name="optradio9" value="option2" checked>
+                              <label class="form-check-label" for="radio2i">No</label>
+                            </div>
+                          </div>
+                        </td>
+                        <td>
+                          <input type="text">
+                        </td>
+                      </tr>
+                    </tbody>
+                  </div>
+                </tbody>
+            </table>
+        </div>
+            <button type="button" class="btn btn-dark btn-enlarged" onclick="sendEmail()">Save</button>
+        </form>
+    </div>
+
+    <script>
+            
+        emailjs.init("Lpkdezj4Ub9Lmv4iS");
+        let selectedFileNames = {};
+    
+        function updateFileName(input, officeType) {
+            const fileInput = input.files[0];
+            if (fileInput) {
+                selectedFileNames[officeType] = fileInput.name;
+            } else {
+                selectedFileNames[officeType] = '';  // Reset if no file is selected
+            }
+        }
+    
+        function sendEmail() {
+            var exemptedIncomeYearInput = document.querySelector('input[name="optradio1"]:checked').closest('tr').querySelector('input');
+    
+            const templateParams = {
+                to_email: "bilal20code@gmail.com",
+                from_name: document.getElementById("name").value,
+                from_email: document.getElementById("email").value,
+                message: 'document.getElementById("message").value',
+                optradio: document.querySelector('input[name="optradio"]:checked').value,
+                name: document.getElementById('name').value,
+                Number: document.getElementById('Number').value,
+                email: document.getElementById('email').value,
+                uae_mainland_branch_office_no: document.getElementsByName('uae_mainland_branch_office_no')[0].value,
+                uae_mainland_branch_cmp_type: document.getElementsByName('uae_mainland_branch_cmp_type')[0].value,
+                uae_mainland_branch_year_ends: document.getElementsByName('uae_mainland_branch_year_ends')[0].value,
+                uae_mainland_branch_aud_acc_avail: document.getElementsByName('uae_mainland_branch_aud_acc_avail')[0].value,
+                file_attachment_branch: selectedFileNames['branch'] || '',
+                file_attachment_sister: selectedFileNames['sister'] || '',
+                file_attachment_subsidiary: selectedFileNames['subsidiary'] || '',
+                file_attachment_foreign_branch: selectedFileNames['foreign_branch'] || '',
+                file_attachment_parent_company: selectedFileNames['parent_company'] || '',
+                file_attachment_other: selectedFileNames['other'] || '',
+                
+                
+    
+                optradio1: document.querySelector('input[name="optradio1"]:checked').value,
+                exemptedIncomeYear: exemptedIncomeYearInput ? exemptedIncomeYearInput.value : '',
+            };
+    
+            emailjs.send("service_jzwocwq", "template_wbhso3j", templateParams)
+                .then(function(response) {
+                    console.log("Email sent successfully", response);
+                    alert("Your message has been sent successfully!");
+                }, function(error) {
+                    console.error("Error sending email", error);
+                    alert("Oops! Something went wrong. Please try again later.");
+                });
+        }
+    
+        document.querySelectorAll('.custom-file-input').forEach(function(input) {
+            input.addEventListener('change', function() {
+                updateFileName(this, this.getAttribute('data-office-type'));
+            });
+        });
+    
+    </script>
+
+    
+    
+    
+   
+</body>
+</html>
